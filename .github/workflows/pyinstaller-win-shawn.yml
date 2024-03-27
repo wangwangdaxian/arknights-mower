@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - dev_shawn
+      - arene
   workflow_dispatch:
 
 jobs:
