@@ -49,41 +49,42 @@ def get_listing():
 
 
 def update():
-    global last_update
-
-    if last_update and datetime.now() - last_update < timedelta(minutes=30):
-        logger.info("跳过热更新检查")
-        load_module(False)
-        return
-
-    logger.info("检查热更新资源")
-    listing = get_listing()
-    filename = "hot_update.zip"
-    entry = next(i for i in listing if i.name == filename)
-    remote_time = datetime.fromtimestamp(mktime(entry.modified))
-    download_update = True
-    if extract_path.exists():
-        local_time = datetime.fromtimestamp(os.path.getctime(extract_path))
-        if local_time > remote_time:
-            download_update = False
-        else:
-            rmtree(extract_path)
-    if download_update:
-        logger.info("开始下载热更新资源")
-        retry_times = 3
-        for i in range(retry_times):
-            try:
-                r = requests.get(f"{mirror}/{filename}")
-                ZipFile(BytesIO(r.content)).extractall(extract_path)
-                break
-            except Exception as e:
-                logger.exception(f"热更新出错：{e}")
-        if i >= retry_times:
-            logger.error("热更新失败！")
-            return
-        logger.info("热更新成功")
-    else:
-        logger.info("本地资源已是最新")
-
-    last_update = datetime.now()
-    load_module(download_update)
+    # global last_update
+    #
+    # if last_update and datetime.now() - last_update < timedelta(minutes=30):
+    #     logger.info("跳过热更新检查")
+    #     load_module(False)
+    #     return
+    #
+    # logger.info("检查热更新资源")
+    # listing = get_listing()
+    # filename = "hot_update.zip"
+    # entry = next(i for i in listing if i.name == filename)
+    # remote_time = datetime.fromtimestamp(mktime(entry.modified))
+    # download_update = True
+    # if extract_path.exists():
+    #     local_time = datetime.fromtimestamp(os.path.getctime(extract_path))
+    #     if local_time > remote_time:
+    #         download_update = False
+    #     else:
+    #         rmtree(extract_path)
+    # if download_update:
+    #     logger.info("开始下载热更新资源")
+    #     retry_times = 3
+    #     for i in range(retry_times):
+    #         try:
+    #             r = requests.get(f"{mirror}/{filename}")
+    #             ZipFile(BytesIO(r.content)).extractall(extract_path)
+    #             break
+    #         except Exception as e:
+    #             logger.exception(f"热更新出错：{e}")
+    #     if i >= retry_times:
+    #         logger.error("热更新失败！")
+    #         return
+    #     logger.info("热更新成功")
+    # else:
+    #     logger.info("本地资源已是最新")
+    #
+    # last_update = datetime.now()
+    # load_module(download_update)
+    return
